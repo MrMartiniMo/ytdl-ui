@@ -1,0 +1,8 @@
+node_modules
+/public/dist
+/downloads
+/.bin
+
+/ytdl-ui.sqlite
+
+.DS_Store
