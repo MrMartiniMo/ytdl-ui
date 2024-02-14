@@ -40,10 +40,12 @@
   "type": "module",
   "scripts": {
     "start": "node src",
-    "dev": "nodemon src/",
+    "dev:server": "nodemon src/",
     "prettier": "npx prettier \"**/*.js\" --write",
     "migrate": "knex migrate:latest",
-    "migrate:make": "knex migrate:make"
+    "migrate:make": "knex migrate:make",
+    "dev:client": "npx tailwindcss -i ./public/app.css -o ./public/dist/output.css --watch",
+    "build:client": "npx tailwindcss -i ./public/app.css -o ./public/dist/output.css"
   },
   "dependencies": {
     "@feathersjs/adapter-commons": "^5.0.21",
@@ -73,7 +75,9 @@
     "@feathersjs/rest-client": "^5.0.21",
     "axios": "^1.6.7",
     "cross-env": "^7.0.3",
+    "daisyui": "^4.7.2",
     "nodemon": "^3.0.3",
-    "prettier": "^3.2.4"
+    "prettier": "^3.2.4",
+    "tailwindcss": "^3.4.1"
   }
 }
