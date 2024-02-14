@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "npx tailwindcss -i ./app.css -o ./dist/output.css --watch",
-    "build": "npx tailwindcss -i ./app.css -o ./dist/output.css --watch",
+    "build": "npx tailwindcss -i ./app.css -o ./dist/output.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
