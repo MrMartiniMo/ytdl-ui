@@ -1,4 +1,4 @@
-# ytdl-ui
+# YTDL-UI
 
 > 
 
@@ -6,36 +6,28 @@
 
 This project uses [Feathers](http://feathersjs.com). An open source framework for building APIs and real-time applications.
 
-## Getting Started
+## Docker
+
+    ```
+    cd path/to/ytdl-ui
+    docker build -t ytdl-ui .
+    docker run -v/your/dl/dest:/usr/src/app/downloads -p 3030:3030 ytdl-ui
+    ```
+
+The server is now ready and running on port 3030. You can access it through your browser at http://localhost:3030.
+
+## Development
 
 1. Make sure you have [NodeJS](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
-2. Install your dependencies
+2. Install dependencies
 
     ```
     cd path/to/ytdl-ui
     npm install
     ```
 
-3. Start your app
+3. Start YTDL-UI
 
     ```
-    npm run migrate # Run migrations to set up the database
-    npm start
+    npm run dev
     ```
-
-## Testing
-
-Run `npm test` and all your tests in the `test/` directory will be run.
-
-## Scaffolding
-
-This app comes with a powerful command line interface for Feathers. Here are a few things it can do:
-
-```
-$ npx feathers help                           # Show all commands
-$ npx feathers generate service               # Generate a new Service
-```
-
-## Help
-
-For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com).
