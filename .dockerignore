@@ -1,0 +1,5 @@
+ytdl-ui.sqlite
+node_modules
+.bin
+.git
+.DS_Store
