@@ -19,16 +19,23 @@ export class YtdlInfoService {
       if (videoInfo.formats) {
         for (const format of videoInfo.formats) {
           if (!(format.acodec === 'none' && format.vcodec === 'none')) {
-            formats.push({
+            const formatInfo = {
               id: format.format_id,
               ext: format.ext,
               resolution: format.resolution,
-              size: format.filesize ? prettyBytes(format.filesize) : 'unknown',
-              size_approx: format.filesize_approx ? prettyBytes(format.filesize_approx) : 'unknown',
               vcodec: format.vcodec === 'none' && format.acodec !== 'none' ? 'audio only' : format.vcodec,
               acodec: format.acodec === 'none' && format.vcodec !== 'none' ? 'video only' : format.acodec,
               note: format.format_note
-            })
+            }
+
+            if (format.filesize) {
+              formatInfo.size = prettyBytes(format.filesize)
+            }
+            if (format.filesize_approx) {
+              formatInfo.size_approx = prettyBytes(format.filesize_approx)
+            }
+
+            formats.push(formatInfo)
           }
         }
       }
