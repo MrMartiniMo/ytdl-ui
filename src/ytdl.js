@@ -1,4 +1,5 @@
 import fs from 'fs'
+import os from 'os'
 
 import { logger } from './logger.js'
 import yargsParser from 'yargs-parser'
@@ -42,7 +43,7 @@ class YTDL {
 
   async #getClient(update = false) {
     if (!fs.existsSync(this.config.executablePath)) {
-      logger.info('Downloading latest yt-dlp...')
+      logger.info(`Downloading latest yt-dlp for ${os.platform()} ...`)
       await YTDlpWrap.downloadFromGithub(this.config.executablePath)
     }
 
