@@ -6,12 +6,28 @@
 
 This project uses [Feathers](http://feathersjs.com). An open source framework for building APIs and real-time applications.
 
-## Docker
+## Use prebuild Docker image
+
+    ```
+    docker run \
+        -v/your/dl/dest:/usr/src/app/downloads \
+        -v/your/db/dest:/usr/src/app/db \
+        -v/your/bin/dest:/usr/src/app/.bin \
+        -p 3030:3030 \
+        mrmartinimo/ytdl-ui
+    ```
+
+## Build your own Docker image
 
     ```
     cd path/to/ytdl-ui
-    docker build -t ytdl-ui .
-    docker run -v/your/dl/dest:/usr/src/app/downloads -p 3030:3030 ytdl-ui
+    docker build -t ytdl-ui . # use e.g. --platform linux/amd64 to build for another platform
+    docker run \
+        -v/your/dl/dest:/usr/src/app/downloads \
+        -v/your/db/dest:/usr/src/app/db \
+        -v/your/bin/dest:/usr/src/app/.bin \
+        -p 3030:3030 \
+        ytdl-ui
     ```
 
 The server is now ready and running on port 3030. You can access it through your browser at http://localhost:3030.
