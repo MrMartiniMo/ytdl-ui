@@ -11,7 +11,7 @@
   },
   "sqlite": {
     "client": "sqlite3",
-    "connection": "ytdl-ui.sqlite",
+    "connection": "db/ytdl-ui.sqlite",
     "useNullAsDefault": true
   },
   "authentication": {
