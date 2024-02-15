@@ -143,11 +143,11 @@ class YTDL {
       })
       .on('error', () => {
         jobService.app.service('jobs')._patch(job.id, { status: 'failed' })
-        this.processes[job.id].status = 'failed'
+        job.status = 'failed'
         logger.info('Download job error')
       })
       .on('close', () => {
-        if (this.processes[job.id].status === 'downloading') {
+        if (job.status === 'downloading') {
           jobService.app.service('jobs')._patch(job.id, { status: 'done' })
         }
         delete this.processes[job.id]
