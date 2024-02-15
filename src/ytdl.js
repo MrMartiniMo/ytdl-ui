@@ -54,7 +54,7 @@ class YTDL {
     if (update) {
       logger.info('Checking for yt-dlp updates...')
 
-      let latestReleasesData = await YTDlpWrap.getGithubReleases()
+      let latestReleasesData = await YTDlpWrap.getGithubReleases(1, 5)
       if (latestReleasesData.length > 0) {
         const latestVersion = latestReleasesData[0].tag_name.trim()
         logger.info(`Latest ytdl version: ${latestVersion}`)
