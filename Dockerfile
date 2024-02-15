@@ -1,6 +1,6 @@
 FROM node:lts-alpine
 
-RUN apk add --update --no-cache python3
+RUN apk add --update --no-cache python3 ffmpeg
 
 WORKDIR /usr/src/app
 
