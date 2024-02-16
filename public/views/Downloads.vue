@@ -149,8 +149,11 @@ export default {
       this.jobs = []
 
       try {
-        const jobs = await this.$feathers.service('jobs').find({})
-
+        const jobs = await this.$feathers.service('jobs').find({
+          query: {
+            $limit: 999999
+          }
+        })
         for (const job of jobs.data) {
           this.jobs.push({
             id: job.id,
