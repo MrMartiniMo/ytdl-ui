@@ -26,7 +26,7 @@
         <tr v-else-if="jobs.length === 0" class="text-center">
           <td colspan="7">No downloads ...</td>
         </tr>
-        <tr v-else v-for="(job, index) in jobs">
+        <tr v-else v-for="(job, index) in filteredJobs">
           <th>
             <button
               v-if="!['starting', 'downloading'].includes(job.status)"
@@ -115,6 +115,11 @@ export default {
     }
   },
   props: {},
+  computed: {
+    filteredJobs() {
+      return this.jobs.sort((a, b) => a.id - b.id)
+    }
+  },
   async mounted() {
     this.$feathers
       .service('jobs')
@@ -158,7 +163,6 @@ export default {
             time: job.time
           })
         }
-        console.log('jobs', JSON.parse(JSON.stringify(this.jobs)))
       } catch (error) {
         this.error = error.message
         console.error('getJobs', error)
@@ -204,6 +208,7 @@ export default {
         // Cleanup done jobs
         try {
           await this.$feathers.service('jobs').remove(null, { query: { status: 'done' } })
+          await this.getJobs()
         } catch (error) {
           this.error = error.message
           console.error('cleanupJobs', error)
