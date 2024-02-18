@@ -25,7 +25,7 @@ export const job = (app) => {
     // A list of all methods this service exposes externally
     methods: jobMethods,
     // You can add additional custom events to be sent to clients here
-    events: ['ytdl:progress']
+    events: ['ytdl:progress', 'patch']
   })
   // Initialize hooks
   app.service(jobPath).hooks({

@@ -142,16 +142,16 @@ class YTDL {
         }
       })
       .on('error', () => {
-        jobService.app.service('jobs')._patch(job.id, { status: 'failed' })
+        jobService.app.service('jobs').patch(job.id, { status: 'failed' })
         job.status = 'failed'
-        logger.info('Download job error')
+        logger.info(`Download job error ${job.id}`)
       })
       .on('close', () => {
         if (job.status === 'downloading') {
-          jobService.app.service('jobs')._patch(job.id, { status: 'done' })
+          jobService.app.service('jobs').patch(job.id, { status: 'done' })
         }
         delete this.processes[job.id]
-        logger.info('Download job closed')
+        logger.info(`Download job closed ${job.id}`)
       })
 
     this.processes[job.id] = process
