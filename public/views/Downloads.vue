@@ -11,6 +11,7 @@
           <th class="w-px"></th>
           <th class="w-px text-right">#</th>
           <th>Filename</th>
+          <th class="w-px">Filesize</th>
           <th class="w-px">Status</th>
           <th class="w-48">Progress</th>
           <th class="w-px">Remaining</th>
@@ -59,6 +60,7 @@
             {{ job.filename }}
           </td>
 
+          <td>{{ job.filesize && job.status === 'downloading' ? job.filesize : '-' }}</td>
           <td>{{ job.status }}</td>
           <td>
             <progress
@@ -134,7 +136,7 @@ export default {
       .on('ytdl:progress', (data) => {
         const index = this.jobs.findIndex((j) => j.id === data.id)
         if (index !== -1) {
-          this.jobs[index].size = data.total
+          this.jobs[index].filesize = data.total
           this.jobs[index].progress = data.progress
           this.jobs[index].eta = data.eta
         }

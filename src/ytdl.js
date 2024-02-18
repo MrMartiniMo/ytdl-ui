@@ -4,6 +4,7 @@ import os from 'os'
 import { logger } from './logger.js'
 import yargsParser from 'yargs-parser'
 import sanitize from 'sanitize-filename'
+import prettyBytes from 'pretty-bytes'
 
 import YTDlpWrapD from 'yt-dlp-wrap'
 const YTDlpWrap = YTDlpWrapD.default
@@ -18,14 +19,12 @@ class YTDL {
   }
 
   constructor(config) {
-    this.config = Object.assign(
-      {
-        executableDir: './.bin',
-        executablePath: `./.bin/yt-dlp`,
-        downloads: './downloads'
-      },
-      config
-    )
+    this.config = {
+      executableDir: './.bin',
+      executablePath: `./.bin/yt-dlp`,
+      downloads: './downloads',
+      ...config
+    }
 
     this.client = null
 
@@ -88,6 +87,29 @@ class YTDL {
     }, [])
   }
 
+  #parseBytesFromString(value) {
+    const units = ['B', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
+
+    const regex = /(\d+\.?\d*)([KMG]?)(i?)B?/i
+    const match = regex.exec(value)
+
+    if (match) {
+      let bytes = parseFloat(match[1])
+
+      if (match[2]) {
+        const binary = match[3] === 'i'
+        const exponent = units.findIndex((unit) => unit === match[2].toUpperCase())
+
+        if (exponent > -1) {
+          bytes *= (binary ? 1024 : 1000) ** exponent
+        }
+      }
+
+      return Math.trunc(bytes)
+    }
+    return 0
+  }
+
   async getVideoInfo(url) {
     try {
       return JSON.parse(
@@ -128,15 +150,23 @@ class YTDL {
 
           if (progressMatch) {
             const progress = parseFloat(progressMatch[1])
-            const total = progressMatch[2]
+            const totalBytes = this.#parseBytesFromString(progressMatch[2])
+            const total = Number.isFinite(totalBytes) ? prettyBytes(totalBytes) : progressMatch[2]
             const speed = progressMatch[4]
             const eta = progressMatch[6]
-            jobService.emit('ytdl:progress', { id: job.id, progress, total, speed, eta })
+
+            jobService.emit('ytdl:progress', {
+              id: job.id,
+              progress,
+              total,
+              speed,
+              eta
+            })
           } else {
             const progress = null
-            const total = 'Unknown'
-            const speed = 'Unknown'
-            const eta = 'Unknown'
+            const total = 'unknown'
+            const speed = 'unknown'
+            const eta = 'unknown'
             jobService.emit('ytdl:progress', { id: job.id, progress, total, speed, eta })
           }
         }

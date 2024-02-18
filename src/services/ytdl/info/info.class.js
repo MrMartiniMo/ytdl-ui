@@ -22,17 +22,27 @@ export class YtdlInfoService {
             const formatInfo = {
               id: format.format_id,
               ext: format.ext,
-              resolution: format.resolution,
-              vcodec: format.vcodec === 'none' && format.acodec !== 'none' ? 'audio only' : format.vcodec,
-              acodec: format.acodec === 'none' && format.vcodec !== 'none' ? 'video only' : format.acodec,
+              resolution: format.resolution ?? 'unknown',
+              vcodec:
+                format.vcodec === 'none' && format.acodec !== 'none'
+                  ? 'audio only'
+                  : format.vcodec ?? 'unknown',
+              acodec:
+                format.acodec === 'none' && format.vcodec !== 'none'
+                  ? 'video only'
+                  : format.acodec ?? 'unknown',
               note: format.format_note
             }
 
             if (format.filesize) {
-              formatInfo.size = prettyBytes(format.filesize)
-            }
-            if (format.filesize_approx) {
-              formatInfo.size_approx = prettyBytes(format.filesize_approx)
+              formatInfo.size = format.filesize
+              formatInfo.formatted_size = prettyBytes(format.filesize)
+            } else if (format.filesize_approx) {
+              formatInfo.size = format.filesize_approx
+              formatInfo.formatted_size = `~ ${prettyBytes(format.filesize_approx)}`
+            } else {
+              formatInfo.size = 'unknown'
+              formatInfo.formatted_size = 'unknown'
             }
 
             formats.push(formatInfo)

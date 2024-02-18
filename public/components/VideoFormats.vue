@@ -49,20 +49,10 @@
           </td>
           <td>{{ format.id }}</td>
           <td>{{ format.ext }}</td>
-
-          <td v-if="format.resolution">{{ format.resolution }}</td>
-          <td v-else>unknown</td>
-
-          <td v-if="format.size">{{ format.size }}</td>
-          <td v-else-if="format.size_approx">~ {{ format.size_approx }}</td>
-          <td v-else>unknown</td>
-
-          <td v-if="format.vcodec">{{ format.vcodec }}</td>
-          <td v-else>unknown</td>
-
-          <td v-if="format.acodec">{{ format.acodec }}</td>
-          <td v-else>unknown</td>
-
+          <td>{{ format.resolution }}</td>
+          <td>{{ format.formatted_size }}</td>
+          <td>{{ format.vcodec }}</td>
+          <td>{{ format.acodec }}</td>
           <td>{{ format.note }}</td>
         </tr>
       </tbody>
