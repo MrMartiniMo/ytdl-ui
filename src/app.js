@@ -44,6 +44,12 @@ app.configure(channels)
 
 app.set('ytdl', await YTDL.init())
 
+app.use('/health', {
+  find() {
+    return 'Healthy'
+  }
+})
+
 // Register hooks that run on all service methods
 app.hooks({
   around: {

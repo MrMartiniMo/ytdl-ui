@@ -45,7 +45,10 @@
     "migrate": "knex migrate:latest",
     "migrate:make": "knex migrate:make",
     "dev:client": "npx tailwindcss -i ./public/app.css -o ./public/dist/output.css --watch",
-    "build:client": "npx tailwindcss -i ./public/app.css -o ./public/dist/output.css"
+    "build:client": "npx tailwindcss -i ./public/app.css -o ./public/dist/output.css",
+    "docker:build": "docker build --platform linux/amd64 -t mrmartinimo/ytdl-ui .",
+    "docker:push": "docker push mrmartinimo/ytdl-ui",
+    "docker": "npm run docker:build && npm run docker:push"
   },
   "dependencies": {
     "@feathersjs/adapter-commons": "^5.0.21",
