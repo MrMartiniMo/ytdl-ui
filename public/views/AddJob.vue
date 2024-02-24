@@ -6,7 +6,18 @@
 
     <form method="post" v-on:submit.prevent="addJob" autocomplete="on">
       <TextInput label="URL" name="url" v-model="url" :disabled="loadingFormats" />
-      <TextInput label="Filename" name="filename" v-model="filename" :disabled="loadingFormats" />
+      <TextInput label="Filename" name="filename" v-model="filename" :disabled="loadingFormats">
+        <template #join-group>
+          <button
+            class="btn join-item ytdl-btn-imdb"
+            type="button"
+            title="IMDb lookup"
+            @click="showIMDbModal = true"
+          >
+            IMDb
+          </button>
+        </template>
+      </TextInput>
       <TextInput
         label="Additional Params"
         name="additional-params"
@@ -43,6 +54,12 @@
         <button class="btn" type="reset" @click="goBackToDownloads">Cancel</button>
       </div>
     </form>
+
+    <ImdbDialog
+      :show="showIMDbModal"
+      @filename="(suggestedFilename) => (filename = suggestedFilename)"
+      v-model:show="showIMDbModal"
+    />
   </div>
 </template>
 
@@ -50,12 +67,14 @@
 import Alert from 'components/Alert.vue'
 import TextInput from 'components/TextInput.vue'
 import VideoFormats from 'components/VideoFormats.vue'
+import ImdbDialog from '../components/ImdbDialog.vue'
 
 export default {
   components: {
     Alert,
     TextInput,
-    VideoFormats
+    VideoFormats,
+    ImdbDialog
   },
   props: {},
   data() {
@@ -69,7 +88,9 @@ export default {
       formats: [],
       loadingFormats: false,
       formatsLoaded: false,
-      selectedFormats: []
+      selectedFormats: [],
+
+      showIMDbModal: false
     }
   },
   computed: {
@@ -183,4 +204,14 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.ytdl-btn-imdb {
+  background-color: #f5c518;
+  color: #000;
+
+  &:hover {
+    background-color: color-mix(in oklab, #f5c518 90%, black);
+    border-color: color-mix(in oklab, #f5c518 90%, black);
+  }
+}
+</style>

@@ -3,7 +3,7 @@ import os from 'os'
 
 import { logger } from './logger.js'
 import yargsParser from 'yargs-parser'
-import sanitize from 'sanitize-filename'
+import sanitizeFilename from 'sanitize-filename'
 import prettyBytes from 'pretty-bytes'
 
 import YTDlpWrapD from 'yt-dlp-wrap'
@@ -126,9 +126,10 @@ class YTDL {
     // modify the output filename in the params
     const outputIndex = params.indexOf('-o')
     if (outputIndex > -1) {
-      params[outputIndex + 1] = `${this.config.downloads}/${job.id}/${sanitize(params[outputIndex + 1])}`
+      params[outputIndex + 1] =
+        `${this.config.downloads}/${job.id}/${sanitizeFilename(params[outputIndex + 1])}`
     } else {
-      params.push('-o', `${this.config.downloads}/${job.id}/${sanitize('%(title)s.%(ext)s')}`)
+      params.push('-o', `${this.config.downloads}/${job.id}/${sanitizeFilename('%(title)s.%(ext)s')}`)
     }
 
     const process = {

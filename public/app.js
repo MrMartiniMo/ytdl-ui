@@ -2,6 +2,7 @@ const { createApp, defineAsyncComponent } = Vue
 const { loadModule } = window['vue3-sfc-loader']
 
 import feathersClient from './plugins/feathers-client.js'
+import utils from './plugins/utils.js'
 
 const options = {
   moduleCache: {
@@ -28,5 +29,6 @@ const app = createApp({
 })
 
 app.use(feathersClient)
+app.use(utils)
 
 app.mount('#app')
