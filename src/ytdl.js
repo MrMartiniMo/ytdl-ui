@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 import os from 'os'
 
 import { logger } from './logger.js'
@@ -30,6 +31,9 @@ class YTDL {
 
     this.#createFolderIfNotExists(this.config.executableDir)
     this.#createFolderIfNotExists(this.config.downloads)
+
+    this.#createFolderIfNotExists(`${this.config.downloads}/processing`)
+    this.#createFolderIfNotExists(`${this.config.downloads}/completed`)
 
     this.processes = {}
   }
@@ -127,9 +131,12 @@ class YTDL {
     const outputIndex = params.indexOf('-o')
     if (outputIndex > -1) {
       params[outputIndex + 1] =
-        `${this.config.downloads}/${job.id}/${sanitizeFilename(params[outputIndex + 1])}`
+        `${this.config.downloads}/processing/${job.id}/${sanitizeFilename(params[outputIndex + 1])}`
     } else {
-      params.push('-o', `${this.config.downloads}/${job.id}/${sanitizeFilename('%(title)s.%(ext)s')}`)
+      params.push(
+        '-o',
+        `${this.config.downloads}/processing/${job.id}/${sanitizeFilename('%(title)s.%(ext)s')}`
+      )
     }
 
     const process = {
@@ -180,6 +187,25 @@ class YTDL {
       .on('close', () => {
         if (job.status === 'downloading') {
           jobService.app.service('jobs').patch(job.id, { status: 'done' })
+
+          // get files in the download folder
+          const files = fs.readdirSync(`${this.config.downloads}/processing/${job.id}`)
+          files.forEach((file) => {
+            const originalFileExt = path.extname(file)
+            const originalFileName = path.basename(file, originalFileExt)
+
+            let i = 0
+            let newFileName = originalFileName
+            while (fs.existsSync(`${this.config.downloads}/completed/${newFileName}${originalFileExt}`)) {
+              i++
+              newFileName = `${originalFileName} (${i})`
+            }
+
+            fs.renameSync(
+              `${this.config.downloads}/processing/${job.id}/${file}`,
+              `${this.config.downloads}/completed/${newFileName}${originalFileExt}`
+            )
+          })
         }
         delete this.processes[job.id]
         logger.info(`Download job closed ${job.id}`)
