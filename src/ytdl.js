@@ -206,6 +206,7 @@ class YTDL {
               `${this.config.downloads}/completed/${newFileName}${originalFileExt}`
             )
           })
+          fs.rmSync(`${this.config.downloads}/processing/${job.id}`, { recursive: true, force: true })
         }
         delete this.processes[job.id]
         logger.info(`Download job closed ${job.id}`)
@@ -219,7 +220,7 @@ class YTDL {
       this.processes[job.id].controller.abort()
 
       setTimeout(() => {
-        fs.rmSync(`${this.config.downloads}/${job.id}`, { recursive: true, force: true })
+        fs.rmSync(`${this.config.downloads}/processing/${job.id}`, { recursive: true, force: true })
       }, 1000)
     }
   }
